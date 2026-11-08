@@ -138,21 +138,23 @@ whom.*
 
 ## 11. Milestone plan
 
-Milestone 1 — Week 6: Screens, navigation, and in-memory state
+Milestone 1 - Week 6: Screens, navigation, and in-memory state
 Build the main screens and connect them with working navigation. Use sample events and in-memory data to demonstrate the core user flows:
 - Browse and filter events by category; open an event’s details.
 - RSVP and show a confirmation and sample digital ticket.
 - View the student’s tickets.
 - Navigate to organizer screens and demonstrate creating or editing an event.
 - Show a department schedule overview with sample bookings to illustrate how a coordinator can spot potential conflicts.
-Milestone 2 — Week 10: Real data
+
+Milestone 2 - Week 10: Real data
 Connect the app to persistent data so that event and registration information is saved and retrieved. Complete the core “must-have” stories with real data:
 - Browse and filter events; view full event details.
 - Create, edit, and publish event listings, including photos, venue information, and participant caps.
 - RSVP and issue a digital ticket with a QR code.
 - Save tickets and essential event details locally so students can access them offline.
 The department schedule overview should use the same saved event and venue data where feasible. Test the core flows with realistic sample accounts and events.
-Final submission — Week 14: Complete and verified release
+
+Final submission - Week 14: Complete and verified release
 Polish the core features, fix issues found during testing, and demonstrate the complete student and organizer flows. If time and technical feasibility allow, add the “should-have” QR check-in and AI event summaries, followed by the “could-have” interactive campus map. Include documentation of testing, known limitations, and the required AI_USAGE.md disclosure with the final submission.
 
 ## 12. AI-use plan

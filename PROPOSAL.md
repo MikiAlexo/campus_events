@@ -14,9 +14,6 @@ Campus Events and Clubs: An app that helps university students with discovering 
 
 ## 2. Group
 
-*Student IDs, emails and GitHub usernames are in `project.yaml`; do not
-repeat them here.*
-
 | Name | Role |
 |---|---|
 | Mikiyas Alemayehu | Team Lead & Backend |
@@ -24,7 +21,6 @@ repeat them here.*
 | Nahom Desta | UI/UX |
 | Yonathan Markos | UI/UX & Testing |
 
-*Roles are starting points; everyone writes code in every layer.*
 
 ## 3. The problem
 
@@ -58,10 +54,6 @@ Frequency of use is once or twice a week.
 8. As a student (general attendee), I want to view event venue locations on an interactive campus map so that I can easily navigate unfamiliar campus locations. (could)
 
 ## 6. Screens
-
-*List every screen with one line describing what it shows and which user
-stories it serves. Add hand-drawn or simple digital sketches for the four
-most important screens (photos of paper sketches are fine).*
 
 | Screen | Purpose | User stories |
 |---|---|---|
@@ -136,10 +128,6 @@ whom.*
 
 ## 10. Risks
 
-*Three to five things that could go wrong (a third-party API might be
-unavailable, a feature might need a paid service, a member has exams)
-and what you will do about each.*
-
 | Risk | Likelihood | Plan |
 |---|---|---|
 | Campus Wi-Fi or internet access may be unavailable when students need to display tickets or organizers need to check attendees in. | Medium | Store issued tickets and essential event details on the device for offline access. Make sure QR tickets can be displayed without a connection. If live verification is unavailable, provide an organizer with a saved attendee list for manual checking. |
@@ -150,36 +138,25 @@ and what you will do about each.*
 
 ## 11. Milestone plan
 
-*Which user stories will be complete at Milestone 1 (week 6), Milestone 2
-(week 10) and the final submission (week 14)? Milestone 1 should contain
-all screens with navigation and in-memory state; Milestone 2 should
-contain real data.*
+Milestone 1 — Week 6: Screens, navigation, and in-memory state
+Build the main screens and connect them with working navigation. Use sample events and in-memory data to demonstrate the core user flows:
+- Browse and filter events by category; open an event’s details.
+- RSVP and show a confirmation and sample digital ticket.
+- View the student’s tickets.
+- Navigate to organizer screens and demonstrate creating or editing an event.
+- Show a department schedule overview with sample bookings to illustrate how a coordinator can spot potential conflicts.
+Milestone 2 — Week 10: Real data
+Connect the app to persistent data so that event and registration information is saved and retrieved. Complete the core “must-have” stories with real data:
+- Browse and filter events; view full event details.
+- Create, edit, and publish event listings, including photos, venue information, and participant caps.
+- RSVP and issue a digital ticket with a QR code.
+- Save tickets and essential event details locally so students can access them offline.
+The department schedule overview should use the same saved event and venue data where feasible. Test the core flows with realistic sample accounts and events.
+Final submission — Week 14: Complete and verified release
+Polish the core features, fix issues found during testing, and demonstrate the complete student and organizer flows. If time and technical feasibility allow, add the “should-have” QR check-in and AI event summaries, followed by the “could-have” interactive campus map. Include documentation of testing, known limitations, and the required AI_USAGE.md disclosure with the final submission.
 
 ## 12. AI-use plan
 
-*Which AI tools, if any, does the group intend to use, and for what
-(learning, generating boilerplate, reviewing code, writing tests)? See
-`../syllabus/policies.md`.*
+The group may use ChatGPT, Gemini, Claude, or a similar assistant to explain unfamiliar concepts, suggest boilerplate, review code the group has written, and help draft test cases. AI-generated work will be treated as a draft: the group will verify it, make sure it is secure and correct, and ensure every member can explain the code they submit.
+We will not use AI during supervised exams, quizzes, or lab exit tasks. We will not share API keys, student data, or other private information with AI tools. We will disclose AI use in the required AI_USAGE.md for each milestone and the final submission, including what we used it for, what we checked, and any mistakes or changes. If we keep a substantial AI-generated block of code, we will attribute it in a code comment as required by the course policy.
 
----
-
-## How the proposal is marked (10 points)
-
-| Criterion | Points |
-|---|---|
-| The problem and the users are specific, and one real person who has the problem is named | 2 |
-| User stories in the given form, each marked must, should or could | 2 |
-| The screens and the data model cover every "must" story | 2 |
-| Local, REST and Firebase data named, and a device feature and an AI feature chosen | 2 |
-| Risks and the milestone plan are realistic for four people and the course weeks | 2 |
-
-## Approval
-
-The instructor returns each proposal with one of these decisions and a
-short written comment:
-
-- **Approved.**
-- **Approved with changes** — the changes are listed; make them before
-  Milestone 1.
-- **Revise and resubmit by the date given in the comment** — the group may not start
-  Milestone 1 work on the parts that must be revised.

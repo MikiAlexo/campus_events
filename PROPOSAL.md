@@ -142,7 +142,11 @@ and what you will do about each.*
 
 | Risk | Likelihood | Plan |
 |---|---|---|
-| | | |
+| Campus Wi-Fi or internet access may be unavailable when students need to display tickets or organizers need to check attendees in. | Medium | Store issued tickets and essential event details on the device for offline access. Make sure QR tickets can be displayed without a connection. If live verification is unavailable, provide an organizer with a saved attendee list for manual checking. |
+| A third-party map service may be unavailable, require payment, or have usage limits. | Medium | Keep the campus map feature optional, as it is a “could-have” story. Use a simple campus map image with venue markers as a fallback, and do not make event discovery or ticket access depend on the map service. |
+| AI-generated summaries may omit or misstate important event details. | Medium | Keep the original event description visible and treat summaries as optional. Prompt the AI to summarize only the supplied description, and review sample summaries for accuracy before release. |
+| QR scanning may fail because of poor lighting, camera permissions, or damaged screens. | Medium | Request camera permission clearly, provide guidance for improving scan conditions, and let organizers search for or manually verify an attendee’s registration as a fallback. |
+| The team may have less development time during exams or other coursework. | High | Complete event browsing, details, RSVP, tickets, and offline ticket access first. Treat QR scanning, AI summaries, and the campus map as lower priority, and reduce or defer these if the core features fall behind. |
 
 ## 11. Milestone plan
 

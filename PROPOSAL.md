@@ -86,12 +86,15 @@ Sketches
 ![alt text](image.png)
 
 2. Event Details Screen 
+
 ![alt text](image-1.png)
 
 3. My Tickets Screen
+
 ![alt text](image-2.png)
 
 4. Organizer Dashboard / Create Event Screen
+
 ![alt text](image-3.png)
 
 ## 7. Data model

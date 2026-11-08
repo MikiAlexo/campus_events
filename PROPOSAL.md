@@ -79,6 +79,12 @@ most important screens (photos of paper sketches are fine).*
 | Campus Map Screen | Shows event venues using interactive map pins to help students navigate campus. | 8 |
 | Profile / Settings Screen | Allows users to manage their profiles, preferences, notifications, and account settings. | Supports all user types |
 | Department Schedule Overview Screen | Allows faculty or administrative coordinators to view scheduled campus activities and identify venue scheduling conflicts. | Department coordinator needs |
+
+Sketches 
+1. Home/Discover Event Screen
+![alt text](image.png)
+2. Event Details Screen 
+![alt text](image-1.png)
 ## 7. Data model
 
 *The main entities and their fields, and how they relate. A simple

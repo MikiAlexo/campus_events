@@ -85,10 +85,21 @@ most important screens (photos of paper sketches are fine).*
 diagram or a list such as:*
 
 ```
-Event: id, title, start, venue, description, organiserId
-User: id, name, email, programme
-Registration: userId, eventId, createdAt
+User: id, fullName, email, programme, role, createdAt
+Club: id, name, description, organizerId
+Event: id, title, description, category, startDateTime, endDateTime, agenda, speakerName, speakerBio, imageUrl, participantLimit, organizerId, clubId, venueId
+Venue: id, name, building, room, capacity, latitude, longitude
+Registration: id, userId, eventId, registeredAt, status
+Ticket: id, registrationId, qrCodeValue, issuedAt, status, checkedInAt
 ```
+Relationships Between Entities
+1.A User can organize multiple events.
+2.A Club can organize multiple events.
+3.An Event belongs to one club and is assigned to one venue.
+4.A User can register for multiple events.
+5.An Event can have multiple registrations.
+6.Each Registration generates one digital ticket.
+7.A Venue can host multiple events at different times.
 
 ## 8. Data sources
 

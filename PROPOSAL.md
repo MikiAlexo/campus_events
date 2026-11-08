@@ -1,7 +1,5 @@
 # Project proposal
 
----
-
 ## 1. Title and one-sentence description
 
 Campus Events and Clubs: An app that helps university students with discovering college activities so that they can engage with campus communities.
@@ -136,7 +134,7 @@ AI Feature: Intelligent Event Agenda Summarizer & Matcher
 
     Associated User Story: Story 7 (AI-generated event agenda summaries and key takeaways).
 
-    Implementation: Integrated with the Google Gemini API (google_generative_ai). When an organizer submits a long event agenda or syllabus, the app queries the Gemini endpoint with the event description and the user's saved interests.
+    Implementation: Integrated with the Google Gemini API (google_generative_ai). When an organizer submits a long event agenda  or syllabus, the app queries the Gemini endpoint with the event description and the user's saved interests.
 
     Data Flow: The raw event description text and user-selected topical tags are sent over HTTPS to the Google Gemini API endpoint. No personally identifiable information (such as student names, emails, or student IDs) is transmitted to the AI service. The response returns three concise bullet points ("Key Takeaways") and a topical relevance tag.
 

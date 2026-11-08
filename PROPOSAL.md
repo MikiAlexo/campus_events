@@ -16,11 +16,11 @@ Campus Events and Clubs: An app that helps university students with discovering 
 
 ## 3. The problem
 
-University campuses host academic seminars, hackathons, cultrual festivals and sports comeptitions. Despite this, a large portion of students remain uninformed and disconnected from campus life. Information is framgmented across telegram channels, unofficial social media accounts and paper posters.
+University campuses host academic seminars, hackathons, cultrual festivals and sports comeptitions. Despite this, a large portion of students remain uninformed and disconnected from campus life. Information is fragmented across telegram channels, unofficial social media accounts and paper posters.
 
-Currently, students track campus activities through word of mouth or telegram channels.Club executives struggle just as much, as they must print physical flyers and have no reliable channel to announce last-minute room or schedule changes.
+Currently, students track campus activities through word of mouth or telegram channels. Club executives struggle just as much, as they must print physical flyers and have no reliable channel to announce last-minute room or schedule changes.
 
-A dedicated mobile app solves this by consolidating campus life into a single pocket dashboard allowing students to track events and activities anywhere from their mobile phones.
+We spoke with Kaleab Tesfaye, a fourth-year undergraduate Computer Science student. Kaleab explained that he missed out on the annual student robotics showcase last year simply because the announcement was made on their telegram channel only. He also mentioned that one of his biggest regrets is not being active in campus life. He noted that having a central hub with category filtering and offline tickets would solve this recurring issue. A dedicated mobile app consolidates campus life into a single pocket dashboard, allowing students to discover and track activities reliably from their phones.
 
 ## 4. Users
 
@@ -83,9 +83,6 @@ Sketches
 
 ## 7. Data model
 
-*The main entities and their fields, and how they relate. A simple
-diagram or a list such as:*
-
 ```
 User: id, fullName, email, programme, role, createdAt
 Club: id, name, description, organizerId
@@ -94,14 +91,14 @@ Venue: id, name, building, room, capacity, latitude, longitude
 Registration: id, userId, eventId, registeredAt, status
 Ticket: id, registrationId, qrCodeValue, issuedAt, status, checkedInAt
 ```
-Relationships Between Entities
-1.A User can organize multiple events.
-2.A Club can organize multiple events.
-3.An Event belongs to one club and is assigned to one venue.
-4.A User can register for multiple events.
-5.An Event can have multiple registrations.
-6.Each Registration generates one digital ticket.
-7.A Venue can host multiple events at different times.
+### Relationships Between Entities
+1. A User can organize multiple events.
+2. A Club can organize multiple events.
+3. An Event belongs to one club and is assigned to one venue.
+4. A User can register for multiple events.
+5. An Event can have multiple registrations.
+6. Each Registration generates one digital ticket.
+7. A Venue can host multiple events at different times.
 
 ## 8. Data sources
 

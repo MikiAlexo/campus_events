@@ -1,11 +1,5 @@
 # Project proposal
 
-**Due:** Sunday 8 November 2026 · **Submit:** commit it as `PROPOSAL.md` in the root
-of your group's repository and tag that commit `proposal`
-
-Replace every *italic* instruction with your own text. Keep the whole
-proposal under four pages.
-
 ---
 
 ## 1. Title and one-sentence description
@@ -17,8 +11,8 @@ Campus Events and Clubs: An app that helps university students with discovering 
 | Name | Role |
 |---|---|
 | Mikiyas Alemayehu | Team Lead & Backend |
-| Yosef Ayele | Backend & Testing |
-| Nahom Desta | UI/UX |
+| Yosef Ayele | Backend & REST API |
+| Nahom Desta | UI/UX & Firebase Services |
 | Yonathan Markos | UI/UX & Testing |
 
 
@@ -113,18 +107,38 @@ Relationships Between Entities
 
 ## 8. Data sources
 
-*Which data is stored locally (and with what: shared_preferences, drift)?
-Which comes from a REST web service (one you build or find), and which
-from Firebase (Auth, Firestore)? Every project needs local persistence, a
-REST source and Firebase.*
+Local Persistence:
+  drift (SQLite ORM) is used to cache the user's active event registrations, downloaded QR codes, and recent event feeds so tickets load instantly even without an internet connection.
+  shared_preferences stores user session preferences, last-selected campus filters, and application theme settings.
+
+REST Web Service:
+ A custom REST API service (built with Node.js/Express) provides the official academic calendar schedule, department room booking availability, and campus emergency announcements in standard JSON format.
+
+Firebase:
+  Firebase Auth handles user identity (email/password and institutional Google Sign-In).
+  Cloud Firestore stores dynamic live event postings, club information, and real-time RSVP updates.
+  Firebase Storage stores event banner images and club logos.
 
 ## 9. Device feature and AI feature
 
-*Every project needs one device feature (camera, location or a sensor)
-**and** one AI feature (for example a summary or a suggestion). For each,
-say which user story needs it. For the device feature, say which
-permissions it asks for; for the AI feature, what data is sent and to
-whom.*
+Device Feature: Camera
+
+  Associated User Story: Story 6 (Club organizer scanning attendee QR tickets).
+
+  Implementation: Uses the device camera via Flutter’s mobile_scanner package. Organizers point the phone camera at a student's digital ticket on their screen to validate admission in real time.
+
+    Permissions Required:
+
+      Android: android.permission.CAMERA
+      iOS: NSCameraUsageDescription ("The app needs camera access to scan event tickets at the venue entry.")
+
+AI Feature: Intelligent Event Agenda Summarizer & Matcher
+
+    Associated User Story: Story 7 (AI-generated event agenda summaries and key takeaways).
+
+    Implementation: Integrated with the Google Gemini API (google_generative_ai). When an organizer submits a long event agenda or syllabus, the app queries the Gemini endpoint with the event description and the user's saved interests.
+
+    Data Flow: The raw event description text and user-selected topical tags are sent over HTTPS to the Google Gemini API endpoint. No personally identifiable information (such as student names, emails, or student IDs) is transmitted to the AI service. The response returns three concise bullet points ("Key Takeaways") and a topical relevance tag.
 
 ## 10. Risks
 

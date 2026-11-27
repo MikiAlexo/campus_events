@@ -1,19 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
+import 'package:campus_events_clubs/features/events/data/in_memory_event_repository.dart';
+import 'package:campus_events_clubs/features/tickets/data/in_memory_ticket_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Dashboard for club organizers to manage published events and check-ins.
 class OrganizerDashboardScreen extends StatelessWidget {
   const OrganizerDashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final eventRepository = ref.read(eventRepositoryProvider);
+    final ticketRepository = ref.read(ticketRepositoryProvider);
+    final organizerId = 'user-organizer-1';
+    final events = eventRepository.getEvents();
+    final organizerEvents = events.where((e) => e.organizerId == organizerId).toList();
+    final registrations = ticketRepository.getRegistrationsForUser(organizerId);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Organizer Dashboard')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text('Organizer Dashboard Screen (Milestone 1 stub)'),
+          const Text('Your Events'),
+          const SizedBox(height: 8),
+          ...organizerEvents.map((event) => Card(
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            child: ListTile(
+              title: Text(event.title),
+              subtitle: Text(event.category.toString()),
+              trailing: Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
+              onTap: () {
+                // Navigate to event details
+              },
+            ),
+          )),
           const SizedBox(height: 16),
+          Text('Registration Count: '),
+          const SizedBox(height: 8),
           FilledButton.icon(
             onPressed: () => context.push('/organizer/events/new'),
             icon: const Icon(Icons.add),

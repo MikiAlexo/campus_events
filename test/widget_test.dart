@@ -1,11 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:campus_events_clubs/main.dart';
+
 import 'package:campus_events_clubs/features/events/data/in_memory_event_repository.dart';
 import 'package:campus_events_clubs/features/events/domain/event.dart';
 import 'package:campus_events_clubs/features/tickets/data/in_memory_ticket_repository.dart';
 import 'package:campus_events_clubs/features/tickets/domain/ticket.dart';
-import 'package:campus_events_clubs/features/tickets/domain/ticket.dart' show TicketStatus;
+import 'package:campus_events_clubs/main.dart';
 
 void main() {
   // Test 1: Event search/category filtering
@@ -33,20 +34,16 @@ void main() {
         userId: 'user-student-1',
         eventId: 'event-1',
       );
-      expect(ticket, isNotNull);
-      expect(ticket!.qrCodeValue, isNotEmpty);
+      expect(ticket.qrCodeValue, isNotEmpty);
       expect(ticket.status, equals(TicketStatus.valid));
     });
 
     test('RSVP for already registered user returns existing ticket', () async {
       final repo = InMemoryTicketRepository();
-      // First RSVP
       final ticket1 = await repo.rsvpToEvent(
         userId: 'user-student-1',
         eventId: 'event-1',
       );
-      expect(ticket1, isNotNull);
-      // Second RSVP for same event should return same ticket
       final ticket2 = await repo.rsvpToEvent(
         userId: 'user-student-1',
         eventId: 'event-1',
@@ -57,7 +54,7 @@ void main() {
 
   // Test 3: Creating or editing an event
   group('Event Creation & Editing', () {
-    test('creates a new event', () {
+    test('creates a new event', () async {
       final repo = InMemoryEventRepository();
       final initialLength = repo.getEvents().length;
       final newEvent = Event(
@@ -65,8 +62,8 @@ void main() {
         title: 'New Test Event',
         description: 'A test event',
         category: EventCategory.tech,
-        startDateTime: DateTime(2024, 12, 5, 10, 0),
-        endDateTime: DateTime(2024, 12, 5, 12, 0),
+        startDateTime: DateTime(2026, 12, 5, 10, 0),
+        endDateTime: DateTime(2026, 12, 5, 12, 0),
         agenda: 'Agenda item',
         speakerName: 'Test Speaker',
         speakerBio: 'Test bio',
@@ -76,15 +73,15 @@ void main() {
         clubId: 'club-1',
         venueId: 'venue-1',
       );
-      repo.createEvent(newEvent);
+      await repo.createEvent(newEvent);
       expect(repo.getEvents().length, equals(initialLength + 1));
     });
 
-    test('updates an existing event using copyWith', () {
+    test('updates an existing event using copyWith', () async {
       final repo = InMemoryEventRepository();
       final event = repo.getEventById('event-1')!;
       final updatedEvent = event.copyWith(title: 'Updated Event Title');
-      repo.updateEvent(updatedEvent);
+      await repo.updateEvent(updatedEvent);
       final updated = repo.getEventById('event-1');
       expect(updated?.title, equals('Updated Event Title'));
     });
@@ -95,10 +92,8 @@ void main() {
     test('detects overlapping events at the same venue', () {
       final repo = InMemoryEventRepository();
       final events = repo.getEvents();
-      // event-1 and event-2 both at venue-2 with overlapping times
       final venueEvents = events.where((e) => e.venueId == 'venue-2').toList();
       expect(venueEvents.length, greaterThanOrEqualTo(2));
-      // Check that event-1 and event-2 overlap
       final event1 = events.firstWhere((e) => e.id == 'event-1');
       final event2 = events.firstWhere((e) => e.id == 'event-2');
       final overlap = event1.startDateTime.isBefore(event2.endDateTime) &&
@@ -107,7 +102,7 @@ void main() {
     });
   });
 
-  // Test 5: Navigation from Home to Event Details
+  // Test 5: Navigation from Splash -> Login -> Home -> Event Details
   group('Navigation', () {
     testWidgets('navigates from Home to Event Details', (tester) async {
       await tester.pumpWidget(
@@ -115,8 +110,20 @@ void main() {
           child: CampusEventsApp(),
         ),
       );
-      // Verify the app pumps correctly
-      expect(find.byType(CampusEventsApp), findsOneWidget);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Get Started'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Student'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Discover Events'), findsOneWidget);
+
+      await tester.tap(find.byType(ListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Event Details'), findsOneWidget);
     });
   });
 }

@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:campus_events_clubs/features/events/data/in_memory_event_repository.dart';
-import 'package:campus_events_clubs/features/events/domain/venue.dart';
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
 import 'package:campus_events_clubs/features/events/domain/club.dart';
 
 /// Displays full details for a single campus event.
-class EventDetailsScreen extends StatelessWidget {
+class EventDetailsScreen extends ConsumerWidget {
   const EventDetailsScreen({required this.eventId, super.key});
 
   final String eventId;
 
   @override
-  Widget build(BuildContext context) {
-    final repo = InMemoryEventRepository();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final repo = ref.read(eventRepositoryProvider);
     final event = repo.getEventById(eventId);
-    final venue =
-        event != null ? repo.getVenueById(event.venueId) : null;
+    final venue = event != null ? repo.getVenueById(event.venueId) : null;
     final club = event != null
         ? repo.getClubs().firstWhere(
               (c) => c.id == event.clubId,
-              orElse: () => Club(
+              orElse: () => const Club(
                 id: 'club-default',
                 name: 'Campus Club',
                 description: '',
                 organizerId: '',
               ),
-          )
+            )
         : null;
 
     return Scaffold(
@@ -46,7 +45,7 @@ class EventDetailsScreen extends StatelessWidget {
                 _InfoRow(
                   icon: Icons.calendar_today,
                   label: 'Date',
-                  value: '${event.startDateTime.toString().split(' ')[0]}',
+                  value: event.startDateTime.toString().split(' ')[0],
                 ),
                 _InfoRow(
                   icon: Icons.location_on,
@@ -80,13 +79,13 @@ class EventDetailsScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const Divider(height: 32),
-                // Buttons row
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Expanded(
                       child: FilledButton(
-                        onPressed:
-                            () => context.push('/events/${event.id}/rsvp-confirm'),
+                        onPressed: () =>
+                            context.push('/events/${event.id}/rsvp-confirm'),
                         child: const Text('RSVP for Event'),
                       ),
                     ),
@@ -99,10 +98,8 @@ class EventDetailsScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                  mainAxisAlignment: MainAxisAlignment.end,
                 ),
                 const SizedBox(height: 16),
-                // Campus map link
                 OutlinedButton.icon(
                   onPressed: () => context.go('/map'),
                   icon: const Icon(Icons.map),
@@ -120,16 +117,15 @@ class EventDetailsScreen extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-
   const _InfoRow({
     required this.icon,
     required this.label,
     required this.value,
-    super.key,
   });
+
+  final IconData icon;
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +139,7 @@ class _InfoRow extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children [
+              children: [
                 Text(
                   label,
                   style: Theme.of(context).textTheme.bodySmall,

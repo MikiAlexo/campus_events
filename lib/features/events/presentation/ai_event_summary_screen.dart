@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 /// Displays AI-generated event takeaways and relevance tags.
 class AiEventSummaryScreen extends StatelessWidget {
@@ -9,7 +8,6 @@ class AiEventSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Sample AI-generated takeaways for the event
     final List<String> takeaways = [
       'Key discussions focused on practical implementation of Flutter concepts',
       'Attendees reported high engagement during the hands-on workshop sessions',
@@ -17,7 +15,6 @@ class AiEventSummaryScreen extends StatelessWidget {
       'Feedback indicates strong interest in future cross-platform app development events',
     ];
 
-    // Sample topical relevance tags
     final List<String> tags = [
       'Flutter',
       'Dart',
@@ -33,7 +30,6 @@ class AiEventSummaryScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // AI Takeaways section
             const Text(
               'AI-Generated Takeaways:',
               style: TextStyle(
@@ -57,7 +53,7 @@ class AiEventSummaryScreen extends StatelessWidget {
                           color: Colors.green,
                           size: 20,
                         ),
-const SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             takeaways[index],
@@ -70,10 +66,7 @@ const SizedBox(width: 8),
                 },
               ),
             ),
-
             const SizedBox(height: 24),
-
-            // Topical relevance tags
             const Text(
               'Topical Relevance:',
               style: TextStyle(

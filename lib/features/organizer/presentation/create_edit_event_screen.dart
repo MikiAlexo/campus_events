@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:campus_events_clubs/core/data/repository_providers.dart';
-import 'package:campus_events_clubs/features/events/data/in_memory_event_repository.dart';
-import 'package:campus_events_clubs/features/events/domain/event.dart';
-import 'package:campus_events_clubs/features/events/domain/event_category.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
+import 'package:campus_events_clubs/features/events/domain/event.dart';
 
 /// Form screen for creating a new event or editing an existing one.
-class CreateEditEventScreen extends StatelessWidget {
+class CreateEditEventScreen extends ConsumerWidget {
   const CreateEditEventScreen({this.eventId, super.key});
 
   final String? eventId;
@@ -19,11 +18,16 @@ class CreateEditEventScreen extends StatelessWidget {
     final event = isEditing ? eventRepository.getEventById(eventId!) : null;
 
     final titleController = TextEditingController(text: event?.title ?? '');
-    final descriptionController = TextEditingController(text: event?.description ?? '');
+    final descriptionController =
+        TextEditingController(text: event?.description ?? '');
     final agendaController = TextEditingController(text: event?.agenda ?? '');
-    final speakerNameController = TextEditingController(text: event?.speakerName ?? '');
-    final speakerBioController = TextEditingController(text: event?.speakerBio ?? '');
-    final participantLimitController = TextEditingController(text: event?.participantLimit.toString() ?? '');
+    final speakerNameController =
+        TextEditingController(text: event?.speakerName ?? '');
+    final speakerBioController =
+        TextEditingController(text: event?.speakerBio ?? '');
+    final participantLimitController = TextEditingController(
+      text: event?.participantLimit.toString() ?? '',
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -61,35 +65,45 @@ class CreateEditEventScreen extends StatelessWidget {
               const SizedBox(height: 8),
               TextField(
                 controller: participantLimitController,
-                decoration: const InputDecoration(labelText: 'Participant Limit'),
+                decoration:
+                    const InputDecoration(labelText: 'Participant Limit'),
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
                   final newEvent = Event(
-                    id: eventId ?? DateTime.now().millisecondString,
+                    id: eventId ??
+                        DateTime.now().millisecondsSinceEpoch.toString(),
                     title: titleController.text,
                     description: descriptionController.text,
-                    category: isEditing ? event!.category : EventCategory.tech,
-                    startDateTime: isEditing ? event!.startDateTime : DateTime.now(),
-                    endDateTime: isEditing ? event!.endDateTime : DateTime.now().add(const Duration(hours: 1)),
+                    category: isEditing && event != null
+                        ? event.category
+                        : EventCategory.tech,
+                    startDateTime: isEditing && event != null
+                        ? event.startDateTime
+                        : DateTime.now(),
+                    endDateTime: isEditing && event != null
+                        ? event.endDateTime
+                        : DateTime.now().add(const Duration(hours: 1)),
                     agenda: agendaController.text,
                     speakerName: speakerNameController.text,
                     speakerBio: speakerBioController.text,
                     imageUrl: event?.imageUrl ?? '',
-                    participantLimit: int.tryParse(participantLimitController.text) ?? 50,
+                    participantLimit:
+                        int.tryParse(participantLimitController.text) ?? 50,
                     organizerId: 'user-organizer-1',
-                    clubId: isEditing ? event!.clubId : 'club-1',
-                    venueId: isEditing ? event!.venueId : 'venue-1',
+                    clubId: isEditing && event != null ? event.clubId : 'club-1',
+                    venueId:
+                        isEditing && event != null ? event.venueId : 'venue-1',
                   );
-                  
+
                   if (isEditing) {
                     await eventRepository.updateEvent(newEvent);
                   } else {
                     await eventRepository.createEvent(newEvent);
                   }
-                  
+
                   if (context.mounted) {
                     context.go('/organizer');
                   }

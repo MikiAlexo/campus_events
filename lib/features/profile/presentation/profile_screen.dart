@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
+import 'package:campus_events_clubs/features/auth/domain/auth_repository.dart';
 import 'package:campus_events_clubs/features/auth/domain/user.dart';
-import 'package:campus_events_clubs/features/auth/data/in_memory_auth_repository.dart';
-import 'package:campus_events_clubs/core/theme/app_theme.dart';
 
 /// User profile, role switcher, and application settings screen.
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final authRepo = context.read<InMemoryAuthRepository>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authRepo = ref.read(authRepositoryProvider);
     final currentUser = authRepo.getCurrentUser();
 
     return Scaffold(
@@ -27,14 +28,13 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class _UserProfile extends StatelessWidget {
-  final User user;
-  final InMemoryAuthRepository authRepo;
-
   const _UserProfile({
     required this.user,
     required this.authRepo,
-    super.key,
   });
+
+  final User user;
+  final AuthRepository authRepo;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,6 @@ class _UserProfile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // User avatar and details
           CircleAvatar(
             radius: 40,
             backgroundColor: colorScheme.primaryContainer,
@@ -55,19 +54,16 @@ class _UserProfile extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-
           Text(
             user.fullName,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 4),
-
           Text(
             user.email,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 4),
-
           _RoleInfoRow(
             icon: Icons.school,
             label: 'Programme',
@@ -78,43 +74,41 @@ class _UserProfile extends StatelessWidget {
             label: 'Role',
             value: user.role.name.toUpperCase(),
           ),
-
           const Divider(height: 32),
-
-          // Settings sections
-          _SettingsSection(
-            title: 'Application Settings',
-            children: [
-              // Theme toggle
-              ListTile(
-                leading: const Icon(Icons.brightness_4),
-                title: const Text('Theme'),
-                trailing: const Icon(Icons.arrow_forward_ios_small),
-                onTap: () {
-                  // TODO: implement theme toggle
-                },
-              ),
-              // Notification toggle
-              ListTile(
-                leading: const Icon(Icons.notifications),
-                title: const Text('Notifications'),
-                trailing: Switch(
-                  value: true,
-                  onChanged: (_) {
-                    // TODO: implement notification toggle
-                  },
-                ),
-              ),
-            ],
+          Text(
+            'Application Settings',
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-
+          const SizedBox(height: 8),
+          ListTile(
+            leading: const Icon(Icons.brightness_4),
+            title: const Text('Theme'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.notifications),
+            title: const Text('Notifications'),
+            trailing: Switch(
+              value: true,
+              onChanged: (_) {},
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.calendar_month),
+            title: const Text('Department Schedule Overview'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () => context.push('/coordinator/schedule'),
+          ),
           const Divider(height: 32),
-
-          // Sign out button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () => authRepo.signOut(),
+              onPressed: () async {
+                await authRepo.signOut();
+                if (!context.mounted) return;
+                context.go('/login');
+              },
               icon: const Icon(Icons.logout),
               label: const Text('Sign Out'),
               style: ElevatedButton.styleFrom(
@@ -123,17 +117,16 @@ class _UserProfile extends StatelessWidget {
               ),
             ),
           ),
-
           const SizedBox(height: 24),
         ],
       ),
     );
   }
 
-  Icon _getIconForRole(UserRole role) {
+  IconData _getIconForRole(UserRole role) {
     switch (role) {
       case UserRole.student:
-        return Icons.person_student;
+        return Icons.school;
       case UserRole.organizer:
         return Icons.person;
       case UserRole.coordinator:
@@ -143,16 +136,15 @@ class _UserProfile extends StatelessWidget {
 }
 
 class _RoleInfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-
   const _RoleInfoRow({
     required this.icon,
     required this.label,
     required this.value,
-    super.key,
   });
+
+  final IconData icon;
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -186,19 +178,19 @@ class _RoleInfoRow extends StatelessWidget {
 }
 
 class _SignInPrompt extends StatelessWidget {
+  const _SignInPrompt();
+
   @override
   Widget build(BuildContext context) {
-    final authRepo = context.read<InMemoryAuthRepository>();
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text('Please sign in to view your profile'),
-          SizedBox(height: 16),
+        children: [
+          const Text('Please sign in to view your profile'),
+          const SizedBox(height: 16),
           FilledButton(
             onPressed: () => context.go('/login'),
-            child: Text('Sign In'),
+            child: const Text('Sign In'),
           ),
         ],
       ),

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:campus_events_clubs/core/data/repository_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
 
 /// Displays the user's registered events and digital QR tickets.
-class MyTicketsScreen extends StatelessWidget {
+class MyTicketsScreen extends ConsumerWidget {
   const MyTicketsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ticketRepository = ref.read(ticketRepositoryProvider);
-    final registrations = ticketRepository.getRegistrationsForUser('user-student-1');
+    final registrations =
+        ticketRepository.getRegistrationsForUser('user-student-1');
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Tickets')),
@@ -29,12 +31,10 @@ class MyTicketsScreen extends StatelessWidget {
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: ListTile(
-                      title: Text('Event '),
-                      subtitle: Text('QR: '),
+                      title: Text('Event: ${reg.eventId}'),
+                      subtitle: Text('Status: ${reg.status.name}'),
                       trailing: const Icon(Icons.qr_code),
-                      onTap: () {
-                        // Navigate to event details or ticket view
-                      },
+                      onTap: () => context.push('/events/${reg.eventId}'),
                     ),
                   );
                 },

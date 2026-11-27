@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:campus_events_clubs/core/data/repository_providers.dart';
-import 'package:campus_events_clubs/features/events/data/in_memory_event_repository.dart';
-import 'package:campus_events_clubs/features/events/domain/event.dart';
-import 'package:campus_events_clubs/features/events/domain/event_category.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
+import 'package:campus_events_clubs/features/events/domain/event.dart';
 
 /// Interactive campus map screen showing event venue markers.
-class CampusMapScreen extends StatelessWidget {
+class CampusMapScreen extends ConsumerWidget {
   const CampusMapScreen({super.key});
 
   @override
@@ -34,11 +34,8 @@ class CampusMapScreen extends StatelessWidget {
                     child: ListTile(
                       leading: const Icon(Icons.location_on),
                       title: Text(venue.name),
-                      subtitle: Text('\ - Room '),
-                      trailing: Text('Capacity: '),
-                      onTap: () {
-                        // Show events at this venue
-                      },
+                      subtitle: Text('${venue.building} - Room ${venue.room}'),
+                      trailing: Text('Capacity: ${venue.capacity}'),
                     ),
                   );
                 },
@@ -57,11 +54,9 @@ class CampusMapScreen extends StatelessWidget {
                     child: ListTile(
                       leading: Icon(_getCategoryIcon(event.category)),
                       title: Text(event.title),
-                      subtitle: Text('\ - '),
+                      subtitle: Text(event.speakerName),
                       trailing: _getCategoryBadge(event.category),
-                      onTap: () {
-                        // Navigate to event details
-                      },
+                      onTap: () => context.push('/events/${event.id}'),
                     ),
                   );
                 },
@@ -73,13 +68,18 @@ class CampusMapScreen extends StatelessWidget {
     );
   }
 
-  Icon _getCategoryIcon(EventCategory category) {
+  IconData _getCategoryIcon(EventCategory category) {
     switch (category) {
-      case EventCategory.tech: return Icons.smart_toy;
-      case EventCategory.social: return Icons.people;
-      case EventCategory.career: return Icons.business;
-      case EventCategory.arts: return Icons.brush;
-      case EventCategory.sports: return Icons.sports_esports;
+      case EventCategory.tech:
+        return Icons.smart_toy;
+      case EventCategory.social:
+        return Icons.people;
+      case EventCategory.career:
+        return Icons.business;
+      case EventCategory.arts:
+        return Icons.brush;
+      case EventCategory.sports:
+        return Icons.sports_esports;
     }
   }
 
@@ -88,11 +88,11 @@ class CampusMapScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
-        category.toString().split('.').last,
+        category.name,
         style: TextStyle(color: color, fontSize: 12),
       ),
     );
@@ -100,11 +100,16 @@ class CampusMapScreen extends StatelessWidget {
 
   Color _getCategoryColor(EventCategory category) {
     switch (category) {
-      case EventCategory.tech: return Colors.blue;
-      case EventCategory.social: return Colors.purple;
-      case EventCategory.career: return Colors.green;
-      case EventCategory.arts: return Colors.orange;
-      case EventCategory.sports: return Colors.red;
+      case EventCategory.tech:
+        return Colors.blue;
+      case EventCategory.social:
+        return Colors.purple;
+      case EventCategory.career:
+        return Colors.green;
+      case EventCategory.arts:
+        return Colors.orange;
+      case EventCategory.sports:
+        return Colors.red;
     }
   }
 }

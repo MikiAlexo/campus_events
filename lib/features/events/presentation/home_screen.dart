@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
+
 /// Home screen for discovering and filtering campus events.
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final events = ref.read(eventRepositoryProvider).getEvents();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Discover Events'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {},
+            icon: const Icon(Icons.calendar_month),
+            tooltip: 'Department Schedule',
+            onPressed: () => context.push('/coordinator/schedule'),
           ),
         ],
       ),
@@ -24,24 +28,21 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Search field
             _SearchField(),
-
             const SizedBox(height: 16),
-
-            // Category chips
             _CategoryChips(),
-
             const SizedBox(height: 16),
-
-            // Events list
             Expanded(
               child: ListView.builder(
-                itemBuilder: (context, index) => _EventCard(
-                  title: 'Flutter and Dart Workshop',
-                  subtitle: 'Tech • Main Auditorium',
-                  onTap: () => context.push('/events/event-1'),
-                ),
+                itemCount: events.length,
+                itemBuilder: (context, index) {
+                  final event = events[index];
+                  return _EventCard(
+                    title: event.title,
+                    subtitle: event.category.name.toUpperCase(),
+                    onTap: () => context.push('/events/${event.id}'),
+                  );
+                },
               ),
             ),
           ],
@@ -61,7 +62,7 @@ class _SearchField extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           hintText: 'Search events...',
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
           suffixIcon: IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () => controller.clear(),
@@ -91,10 +92,10 @@ class _CategoryChips extends StatelessWidget {
 }
 
 class _Chip extends StatelessWidget {
+  const _Chip({required this.label, required this.colorScheme});
+
   final String label;
   final ColorScheme colorScheme;
-
-  const _Chip({required this.label, required this.colorScheme});
 
   @override
   Widget build(BuildContext context) {
@@ -108,29 +109,31 @@ class _Chip extends StatelessWidget {
       ),
       backgroundColor: colorScheme.surface,
       selectedColor: colorScheme.primary,
-      labelStyle: const TextStyle(color: Colors.white, fontSize: 12),
+      labelStyle: TextStyle(color: colorScheme.onSurface, fontSize: 12),
     );
   }
 }
 
 class _EventCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
   const _EventCard({
     required this.title,
     required this.subtitle,
     required this.onTap,
   });
 
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        leading: Icon(Icons.devices,
-            color: Theme.of(context).colorScheme.primary),
+        leading: Icon(
+          Icons.event,
+          color: Theme.of(context).colorScheme.primary,
+        ),
         title: Text(title),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),

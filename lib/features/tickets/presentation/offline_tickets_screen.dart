@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:campus_events_clubs/core/data/repository_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
 import 'package:campus_events_clubs/features/tickets/domain/ticket.dart';
-import 'package:campus_events_clubs/features/tickets/domain/ticket_status.dart';
 
 /// Displays cached digital tickets for offline venue check-in.
-class OfflineTicketsScreen extends StatelessWidget {
+class OfflineTicketsScreen extends ConsumerWidget {
   const OfflineTicketsScreen({super.key});
 
   @override
@@ -31,15 +31,16 @@ class OfflineTicketsScreen extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     child: ListTile(
                       leading: const Icon(Icons.qr_code, color: Colors.green),
-                      title: Text('Event '),
-                      subtitle: Text('QR: '),
+                      title: Text('Ticket ${ticket.id}'),
+                      subtitle: Text('QR: ${ticket.qrCodeValue}'),
                       trailing: Icon(
-                        ticket.status == TicketStatus.checkedIn ? Icons.check_circle : Icons.qr_code,
-                        color: ticket.status == TicketStatus.checkedIn ? Colors.green : null,
+                        ticket.status == TicketStatus.checkedIn
+                            ? Icons.check_circle
+                            : Icons.qr_code,
+                        color: ticket.status == TicketStatus.checkedIn
+                            ? Colors.green
+                            : null,
                       ),
-                      onTap: () {
-                        // Show ticket details for offline entry
-                      },
                     ),
                   );
                 },

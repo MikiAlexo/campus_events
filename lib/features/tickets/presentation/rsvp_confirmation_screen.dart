@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:campus_events_clubs/features/tickets/data/in_memory_ticket_repository.dart';
-import 'package:campus_events_clubs/core/data/repository_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:campus_events_clubs/core/data/repository_providers.dart';
 
 /// Confirms a student's RSVP and links to their digital ticket.
-class RsvpConfirmationScreen extends StatelessWidget {
+class RsvpConfirmationScreen extends ConsumerWidget {
   const RsvpConfirmationScreen({required this.eventId, super.key});
 
   final String eventId;
@@ -24,7 +24,7 @@ class RsvpConfirmationScreen extends StatelessWidget {
             children: [
               const Icon(Icons.check_circle, size: 64, color: Colors.green),
               const SizedBox(height: 16),
-              const Text('Processing RSVP...'),
+              Text('RSVP for $eventId'),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
@@ -32,21 +32,15 @@ class RsvpConfirmationScreen extends StatelessWidget {
                     userId: 'user-student-1',
                     eventId: eventId,
                   );
-                  if (ticket != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('RSVP successful! Ticket QR: '),
-                        duration: const Duration(seconds: 3),
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'RSVP successful! Ticket QR: ${ticket.qrCodeValue}',
                       ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('RSVP failed'),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                  }
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
                 },
                 child: const Text('Complete RSVP'),
               ),
